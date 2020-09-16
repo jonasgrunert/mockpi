@@ -9,7 +9,6 @@ import {
   serializeRequest,
 } from "./matchResponse";
 import { buildResponse } from "./buildResponse";
-import { URL } from "url";
 
 class MockAPI {
   private spec: OpenAPI.Document;
@@ -23,7 +22,9 @@ class MockAPI {
   }[] = [];
   private transformResponses: {
     requestMatcher: (req: serializedRequest) => boolean;
-    value: string | ((res: string, req: serializedRequest) => string);
+    value:
+      | string
+      | ((res: string, req?: serializedRequest, c?: typeof casual) => string);
     config: {
       persist: boolean;
     };
@@ -91,7 +92,8 @@ class MockAPI {
           if (transformResponse.length !== 0) {
             value = transformResponse.reduce((prev, { value: curr }) => {
               if (typeof curr === "string") return curr;
-              if (typeof curr === "function") return curr(prev, requests[0]);
+              if (typeof curr === "function")
+                return curr(prev, requests[0], casual);
               return prev;
             }, value);
           }
@@ -144,7 +146,9 @@ class MockAPI {
 
   withResponse(
     requestMatcher: (req: serializedRequest) => boolean,
-    value: string | ((res: string, req: serializedRequest) => string),
+    value:
+      | string
+      | ((res: string, req?: serializedRequest, c?: typeof casual) => string),
     config: {
       persist: boolean;
     } = {
