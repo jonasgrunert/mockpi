@@ -16,6 +16,7 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
   if (res.example) {
     return res.example;
   }
+  if (res.enum && res.enum.length > 0) return casual.random_element(res.enum);
   // Switching based on the type
   switch (res.type) {
     case "boolean":
