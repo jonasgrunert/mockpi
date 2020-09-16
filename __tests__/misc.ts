@@ -76,3 +76,17 @@ describe("Serialize reqeust serializes an incoming request", () => {
     expect(ser.parameters.petId).toBe("69");
   });
 });
+
+describe("Mitm internal keepAlive", () => {
+  it("Properly destroys connection with keep alive", async () => {
+    const agent = new https.Agent({ keepAlive: true });
+    for (let i = 1; i < 10000; i++) {
+      await new Promise((resolve, reject) => {
+        https.get("https://example.com", { agent }, res => {
+          res.on("data", d => {});
+          res.on("end", resolve);
+        });
+      });
+    }
+  });
+});

@@ -106,6 +106,8 @@ class MockAPI {
         } catch (err) {
           res.statusCode = 500;
           res.end(err.message);
+        } finally {
+          req.destroy();
         }
       });
     }
