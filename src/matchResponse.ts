@@ -62,14 +62,13 @@ export function matchSpec(
           .filter(t => t);
         return (
           parts.length === urlParts.length &&
-            urlParts.every(
-              (curr, i) =>
-                (parts[i] &&
-                  parts[i].startsWith("{") &&
-                  parts[i].endsWith("}")) ||
-                curr === parts[i]
-            ),
-          true
+          urlParts.every(
+            (curr, i) =>
+              (parts[i] &&
+                parts[i].startsWith("{") &&
+                parts[i].endsWith("}")) ||
+              curr === parts[i]
+          )
         );
       })
     );
