@@ -1,6 +1,6 @@
 {
   "name": "mockpi",
-  "version": "0.0.0-alpha",
+  "version": "0.0.0",
   "description": "An OpenAPI mocking tool designed with Jest integrationstest in mind.",
   "main": "dist/index.js",
   "repository": "https://github.com/jonasgrunert/mockpi",
