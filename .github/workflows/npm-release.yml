@@ -3,6 +3,7 @@ on:
   push:
     paths-ignore:
       - CHANGELOG.md
+      - package.json
     branches:
       - stable
 jobs:
