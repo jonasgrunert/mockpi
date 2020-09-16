@@ -40,7 +40,10 @@ export function matchSpec(
         const serverUrl = new URL(server.url);
         if (serverUrl.protocol !== fullUrl.protocol) return false;
         if (serverUrl.hostname !== fullUrl.hostname) return false;
-        if (!fullUrl.pathname.startsWith(serverUrl.pathname)) return false;
+        if (
+          !decodeURI(fullUrl.pathname).startsWith(decodeURI(serverUrl.pathname))
+        )
+          return false;
         return true;
       })
       .map(server => new URL(server.url));
@@ -50,11 +53,13 @@ export function matchSpec(
     // Do any future paths match, otherwise we have to give up
     const matchedRoutes = Object.keys(openApi.paths).filter(path =>
       matchedServers.some(server => {
-        const urlParts = fullUrl.pathname
+        const urlParts = decodeURI(fullUrl.pathname)
           .slice(server.pathname.length)
           .split("/")
           .filter(t => t);
-        const parts = path.split("/").filter(t => t);
+        const parts = decodeURI(path)
+          .split("/")
+          .filter(t => t);
         return urlParts.reduce((prev, curr, i) => {
           return prev
             ? parts[i] && parts[i].startsWith("{") && parts[i].endsWith("}")
