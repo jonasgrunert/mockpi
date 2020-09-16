@@ -1,0 +1,30 @@
+name: NPM Release
+on:
+  push:
+    paths-ignore:
+      - CHANGELOG.md
+    branches:
+      - stable
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_AUTH_TOKEN }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+          registry-url: "https://registry.npmjs.org"
+      - run: yarn
+      - name: Git config
+        run: |
+          git config --global user.name 'Jonas Grunert'
+          git config --global user.email 'jonasgrunert@users.noreply.github.com'
+      - run: yarn build
+      - run: yarn release
+        env:
+          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ secrets.GIT_AUTH_TOKEN }}
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
