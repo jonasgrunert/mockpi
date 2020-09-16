@@ -24,8 +24,6 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
       return casual.integer();
     case "number":
       return casual.double();
-    case "null":
-      return null;
     case "string": {
       if (res.format === "date") return casual.date();
       if (res.format === "date-time")
