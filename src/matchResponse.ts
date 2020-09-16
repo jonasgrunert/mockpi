@@ -52,8 +52,9 @@ export function matchSpec(
       matchedServers.some(server => {
         const urlParts = fullUrl.pathname
           .slice(server.pathname.length)
-          .split("/");
-        const parts = path.split("/");
+          .split("/")
+          .filter(t => t);
+        const parts = path.split("/").filter(t => t);
         return urlParts.reduce((prev, curr, i) => {
           return prev
             ? parts[i] && parts[i].startsWith("{") && parts[i].endsWith("}")
@@ -100,8 +101,8 @@ export function serializeRequest(
   req: IncomingMessage
 ): serializedRequest {
   const url = constructURL(req);
-  const parts = path.split("/");
-  let urlParts = url.pathname.split("/");
+  const parts = path.split("/").filter(t => t);
+  let urlParts = url.pathname.split("/").filter(t => t);
   urlParts = urlParts.slice(urlParts.length - parts.length);
   const parameters: Record<string, string> = parts.reduce((prev, curr, i) => {
     if (curr.startsWith("{") && curr.endsWith("}")) {
