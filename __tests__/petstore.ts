@@ -152,4 +152,41 @@ describe("Easily mock APIs", () => {
     expect(response.code).toBe(400);
     expect(response.data).toBe("Something went wrong");
   });
+
+  it("Matches a path with a space inside", async () => {
+    const response: string = await new Promise((res, rej) =>
+      https
+        .get("https://petstore.swagger.io/v2/store order", resp => {
+          let data = "";
+          resp.on("data", chunk => {
+            data += chunk;
+          });
+          resp.on("end", () => {
+            res(data);
+          });
+        })
+        .on("error", err => {
+          rej(err);
+        })
+    );
+    expect(petStore.getCallCount()).toBe(1);
+  });
+  it("Matches a path with an escaped space inside", async () => {
+    const response: string = await new Promise((res, rej) =>
+      https
+        .get("https://petstore.swagger.io/v2/store%20order", resp => {
+          let data = "";
+          resp.on("data", chunk => {
+            data += chunk;
+          });
+          resp.on("end", () => {
+            res(data);
+          });
+        })
+        .on("error", err => {
+          rej(err);
+        })
+    );
+    expect(petStore.getCallCount()).toBe(1);
+  });
 });
