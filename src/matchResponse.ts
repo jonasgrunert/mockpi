@@ -60,13 +60,16 @@ export function matchSpec(
         const parts = decodeURI(path)
           .split("/")
           .filter(t => t);
-        return urlParts.reduce((prev, curr, i) => {
-          return prev
-            ? parts[i] && parts[i].startsWith("{") && parts[i].endsWith("}")
-              ? true
-              : curr === parts[i]
-            : false;
-        }, true);
+        return (
+          parts.length === urlParts.length &&
+          urlParts.every(
+            (curr, i) =>
+              (parts[i] &&
+                parts[i].startsWith("{") &&
+                parts[i].endsWith("}")) ||
+              curr === parts[i]
+          )
+        );
       })
     );
     if (matchedRoutes.length === 0) {

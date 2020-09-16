@@ -13,7 +13,7 @@
     "lint": "eslint src/** --fix",
     "test": "jest",
     "prerelease": "yarn lint && yarn test --collectCoverage",
-    "release": "standard-version -a",
+    "release": "standard-version -a --preset conventional-changelog-angular",
     "postrelease": "git push --follow-tags && conventional-github-releaser -p angular"
   },
   "dependencies": {
