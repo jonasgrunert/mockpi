@@ -16,6 +16,7 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
   if (res.example) {
     return res.example;
   }
+  if (res.enum && res.enum.length > 0) return casual.random_element(res.enum);
   // Switching based on the type
   switch (res.type) {
     case "boolean":
@@ -25,8 +26,6 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
     case "number":
       return casual.double();
     case "string": {
-      if (res.enum && res.enum.length > 0)
-        return casual.random_element(res.enum);
       if (res.format === "date") return casual.date();
       if (res.format === "date-time")
         return `${casual.date()}T${casual.time()}Z`;
