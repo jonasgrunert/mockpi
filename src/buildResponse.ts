@@ -22,9 +22,9 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
     case "boolean":
       return casual.boolean;
     case "integer":
-      return casual.integer();
+      return casual.integer(res.minimum, res.maximum);
     case "number":
-      return casual.double();
+      return casual.double(res.minimum, res.maximum);
     case "string": {
       if (res.format === "date") return casual.date();
       if (res.format === "date-time")
@@ -33,7 +33,7 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
     }
     case "array": {
       const data = [];
-      const count = casual.integer(2, 7);
+      const count = casual.integer(res.minItems ?? 2, res.maxItems ?? 7);
       for (let i = 0; i < count; i++) {
         data.push(getExample(res.items as OpenAPIV3.SchemaObject));
       }
