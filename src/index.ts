@@ -29,13 +29,14 @@ class MockAPI {
       persist: boolean;
     };
   }[] = [];
-  private static initialized: false;
+  private static initialized = false;
   private static mitm: ReturnType<typeof Mitm>;
   private static mockedAPIs = new Map<string, MockAPI>();
 
   static async mock(pathToFile: string): Promise<MockAPI> {
     if (!this.initialized) {
       this.mitm = Mitm();
+      this.initialized = true;
       this.mitm.on("request", (req, res) => {
         try {
           if (!req.url) {
