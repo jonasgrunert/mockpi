@@ -64,10 +64,7 @@ export function matchSpec(
           parts.length === urlParts.length &&
           urlParts.every(
             (curr, i) =>
-              (parts[i] &&
-                parts[i].startsWith("{") &&
-                parts[i].endsWith("}")) ||
-              curr === parts[i]
+              (parts[i] && /\{.+\}/.test(parts[i])) || curr === parts[i]
           )
         );
       })
@@ -113,8 +110,9 @@ export function serializeRequest(
   let urlParts = url.pathname.split("/").filter(t => t);
   urlParts = urlParts.slice(urlParts.length - parts.length);
   const parameters: Record<string, string> = parts.reduce((prev, curr, i) => {
-    if (curr.startsWith("{") && curr.endsWith("}")) {
-      return { ...prev, [curr.slice(1, curr.length - 1)]: urlParts[i] };
+    if (/\{.+\}/.test(curr)) {
+      const match = /\{.+\}/.exec(curr)![0];
+      return { ...prev, [match.slice(1, match.length - 1)]: urlParts[i] };
     }
     return prev;
   }, {});
