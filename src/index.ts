@@ -101,7 +101,7 @@ class MockAPI {
           specs[0].responses.push({
             request: requests[0],
             response:
-              contentType && transformResponse.length !== 0
+              contentType && transformResponse.length === 0
                 ? objectValue
                 : value,
             code: +code,
