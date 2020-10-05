@@ -129,3 +129,35 @@ describe("Matches also badly written urls", () => {
     expect(petStore.getCallCount()).toBe(1);
   });
 });
+
+describe("Multiple transforms works out", () => {
+  it("Uses multiple transforms properly", async () => {
+    petStore.withState(400);
+    petStore.withResponse(
+      req => req.url.pathname.includes("/store/order"),
+      "Something went wrong"
+    );
+    petStore.withResponse(req => req.method === "get", "LETS go");
+    const response: { data: string; code: number } = await new Promise(
+      (res, rej) =>
+        https
+          .get("https://petstore.swagger.io/v2/pet/69", resp => {
+            let data = "";
+            resp.on("data", chunk => {
+              data += chunk;
+            });
+            resp.on("end", () => {
+              res({ data, code: resp.statusCode! });
+            });
+          })
+          .on("error", err => {
+            rej(err);
+          })
+    );
+    expect(petStore.getCallCount()).toBe(1);
+    expect(petStore.getResponse().code).toBe(400);
+    expect(petStore.getResponse().response).toBe("LETS go");
+    expect(response.code).toBe(400);
+    expect(response.data).toBe("LETS go");
+  });
+});
