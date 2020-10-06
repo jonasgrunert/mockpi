@@ -137,7 +137,7 @@ describe("Multiple transforms works out", () => {
       req => req.url.pathname.includes("/store/order"),
       "Something went wrong"
     );
-    petStore.withResponse(req => req.method === "get", "LETS go");
+    petStore.withResponse(req => req.method === "get", "GET");
     const response: { data: string; code: number } = await new Promise(
       (res, rej) =>
         https
@@ -156,8 +156,8 @@ describe("Multiple transforms works out", () => {
     );
     expect(petStore.getCallCount()).toBe(1);
     expect(petStore.getResponse().code).toBe(400);
-    expect(petStore.getResponse().response).toBe("LETS go");
+    expect(petStore.getResponse().response).toBe("GET");
     expect(response.code).toBe(400);
-    expect(response.data).toBe("LETS go");
+    expect(response.data).toBe("GET");
   });
 });
