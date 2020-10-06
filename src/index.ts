@@ -91,10 +91,10 @@ class MockAPI {
             ({ requestMatcher }) => requestMatcher(requests[0])
           );
           if (transformResponse.length !== 0) {
-            value = transformResponse.reduce((prev, { value: curr }) => {
-              if (typeof curr === "string") return curr;
-              if (typeof curr === "function")
-                return curr(prev, requests[0], casual);
+            value = transformResponse.reduce((prev, curr) => {
+              if (typeof curr.value === "string") return curr.value;
+              if (typeof curr.value === "function")
+                return curr.value(prev, requests[0], casual);
               return prev;
             }, value);
           }
@@ -208,7 +208,7 @@ class MockAPI {
     this.responses = [];
     this.state = undefined;
     this.transformResponses = this.transformResponses.filter(
-      ({ config: { persist } }) => !persist
+      ({ config: { persist } }) => persist
     );
   }
 }
