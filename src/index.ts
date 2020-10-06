@@ -208,7 +208,7 @@ class MockAPI {
     this.responses = [];
     this.state = undefined;
     this.transformResponses = this.transformResponses.filter(
-      ({ config: { persist } }) => !persist
+      ({ config: { persist } }) => persist
     );
   }
 }
