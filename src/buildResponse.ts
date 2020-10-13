@@ -1,5 +1,6 @@
 import { OpenAPIV3 } from "openapi-types";
 import casual from "casual";
+import Randexp from "randexp";
 
 export function buildResponse(res: OpenAPIV3.MediaTypeObject): unknown {
   // This is unclever we should wathc what a kind of example gets returned, but vor 0.0.1 it is okay
@@ -29,6 +30,9 @@ function getExample(res: OpenAPIV3.SchemaObject): unknown {
       if (res.format === "date") return casual.date();
       if (res.format === "date-time")
         return `${casual.date()}T${casual.time()}Z`;
+      if (res.pattern) {
+        return new Randexp(new RegExp(res.pattern)).gen();
+      }
       return casual.string;
     }
     case "array": {

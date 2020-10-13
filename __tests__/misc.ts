@@ -161,3 +161,27 @@ describe("Multiple transforms works out", () => {
     expect(response.data).toBe("GET");
   });
 });
+
+describe("Pattern matching will generate you a string", () => {
+  it("Renders a string with category", async () => {
+    petStore.withState(200);
+    const response: { data: string; code: number } = await new Promise(
+      (res, rej) =>
+        https
+          .get("https://petstore.swagger.io/v2/pet/69", resp => {
+            let data = "";
+            resp.on("data", chunk => {
+              data += chunk;
+            });
+            resp.on("end", () => {
+              res({ data, code: resp.statusCode! });
+            });
+          })
+          .on("error", err => {
+            rej(err);
+          })
+    );
+    const json: { category: { name: string } } = JSON.parse(response.data);
+    expect(json.category.name).toMatch(/cat-\d{1,2}/);
+  });
+});

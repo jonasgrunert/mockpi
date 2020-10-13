@@ -298,6 +298,7 @@ components:
           format: int64
         name:
           type: string
+          pattern: cat-\d{1,2}
     Tag:
       type: object
       properties:
